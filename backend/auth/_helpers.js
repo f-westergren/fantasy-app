@@ -7,7 +7,7 @@ const comparePass = (userPassword, databasePassword) => {
 
 const createToken = (user) => {
 	let payload = { username: user };
-	return jwt.sign(payload, process.env.SECRET);
+	return jwt.sign(payload, 'test');
 };
 
 module.exports = { comparePass, createToken };

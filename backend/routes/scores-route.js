@@ -6,6 +6,7 @@ const router = express.Router();
 
 router.get('/', scoresRoutes.scoresAll);
 router.post('/', scoresRoutes.scoresCreate);
+router.patch('/', scoresRoutes.scoresUpdate);
 // router.get('/:username', picksRoutes.picksOne);
 // router.delete('/', picksRoutes.picksReset);
 

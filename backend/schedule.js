@@ -26,3 +26,6 @@ const saveResults = async () => {
 const resetResults = async () => {
 	knex.select('*').from('picks').truncate().then(console.log('Picks deleted.'));
 };
+
+
+saveResults();

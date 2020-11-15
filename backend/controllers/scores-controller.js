@@ -44,9 +44,9 @@ const scoresOne = async (req, res) => {
 };
 
 const scoresUpdate = async (req, res) => {
-	knex('picks')
-		.where({ username: req.body.username })
-		.update({ roster: req.body.roster })
+	knex('scores')
+		.where({ id: req.body.id })
+		.update({ week: req.body.week })
 		.then(() => {
 			res.json({ message: `Scores updated.` });
 		})
