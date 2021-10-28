@@ -35,17 +35,12 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const initialState = {
-	best_QB: { name: '' },
-	worst_QB: { name: '' },
-	best_RB: { name: '' },
-	worst_RB: { name: '' },
-	best_WR: { name: '' },
-	worst_WR: { name: '' },
-	best_TE: { name: '' },
-	worst_TE: { name: '' },
-	best_DST: { name: '' },
-	worst_DST: { name: '' }
-};
+	QB: ["",""],
+	RB: ["",""],
+	WR: ["",""],
+	TE: ["",""],
+	DST: ["",""]
+}
 
 const PicksForm = () => {
 	const history = useHistory();
@@ -92,9 +87,21 @@ const PicksForm = () => {
 
 	const handleChange = (e) => {
 		let { name, value } = e.target;
+
+		// Get poisiton name and value
+		const pos = name.split('_')[1]
+		let newValue = formData[pos]
+		
+		// If pick is best pick or worst pick.
+		if (name[0] === 'b') {
+			newValue[0] = value
+		} else if (name[0] === 'w') {
+			newValue[1] = value
+		}
+		
 		setFormData((data) => ({
 			...data,
-			[name]: { name: value }
+			[pos]: newValue
 		}));
 	};
 
@@ -106,11 +113,11 @@ const PicksForm = () => {
 					username,
 					roster: JSON.stringify(formData)
 				});
-			} else {
+			} else { 
 				await axios.post(`${API_URL}/picks`, {
 					username,
 					roster: JSON.stringify(formData),
-					week: 8
+					week: 10
 				});
 			}
 			history.push('/score');
@@ -121,6 +128,7 @@ const PicksForm = () => {
 	};
 	if (isLoading) return <Loading />;
 	if (error.type === 'load') return <div>{error.message}</div>;
+
 	return (
 		<Box className={classes.root}>
 			<Paper className={classes.paper}>
@@ -128,10 +136,10 @@ const PicksForm = () => {
 					<Grid container m={12} justify="flex-end">
 						{Object.keys(roster.lineup).map((pos, idx) => (
 							<React.Fragment key={`${pos}-${idx}`}>
-								<Grid item sm={6} xs={12} key={`grid1${idx}`}>
+								<Grid item sm={6} xs={12}>
 									<PicksSelect
 										handleChange={handleChange}
-										value={formData[`best_${pos}`].name}
+										value={formData[pos][0]}
 										position={roster.lineup[pos]}
 										label={`Best ${pos}`}
 										name={`best_${pos}`}
@@ -141,7 +149,7 @@ const PicksForm = () => {
 								<Grid item sm={6} xs={12} key={`grid2${idx}`}>
 									<PicksSelect
 										handleChange={handleChange}
-										value={formData[`worst_${pos}`].name}
+										value={formData[pos][1]}
 										position={roster.lineup[pos]}
 										label={`Worst ${pos}`}
 										name={`worst_${pos}`}

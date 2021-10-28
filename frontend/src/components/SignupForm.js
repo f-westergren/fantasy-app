@@ -1,11 +1,15 @@
 import React, { useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useHistory, Redirect } from 'react-router-dom';
 import Button from '@material-ui/core/button';
 import Paper from '@material-ui/core/paper';
 import TextField from '@material-ui/core/TextField';
 import Grid from '@material-ui/core/grid';
 import { makeStyles } from '@material-ui/core/styles';
-import FantasyApi from '../FantasyApi';
+import { useAuth } from './context/auth';
+import getFromToken from '../utils';
+import axios from 'axios';
+
+const API_URL = process.env.REACT_APP_API_URL;
 
 const useStyles = makeStyles((theme) => ({
 	root: {
@@ -35,9 +39,13 @@ const useStyles = makeStyles((theme) => ({
 export default function SignupForm() {
 	const classes = useStyles();
 	const history = useHistory();
-
+	const { authToken, setAuthToken } = useAuth();
 	const [ formData, setFormData ] = useState('');
 	const [ error, setError ] = useState(false);
+
+	const user = getFromToken(authToken, 'username');
+
+	if (user) return <Redirect to="/" />;
 
 	const handleChange = (e) => {
 		const { name, value } = e.target;
@@ -50,10 +58,16 @@ export default function SignupForm() {
 	const handleSubmit = async (e) => {
 		e.preventDefault();
 		try {
-			await FantasyApi.createUser(formData);
-			history.push('/');
+			const res = await axios.post(`${API_URL}/users`, formData)
+			setAuthToken(res.data.token);
+			history.push('/picks');
 		} catch (err) {
-			setError(err);
+			console.log(err)
+			if (err.response.data.message) {
+				setError(err.response.data.message)
+			} else {
+				setError('Something went wrong :(')
+			}
 		}
 	};
 
@@ -91,13 +105,10 @@ export default function SignupForm() {
 							label="Repeat Password"
 							type="password"
 							variant="outlined"
-							name="password-repeat"
+							name="repeat_password"
 							onChange={handleChange}
 							value={formData['name']}
 						/>
-					</Grid>
-					<Grid item xs={12}>
-						<TextField required id="email" label="Email" variant="outlined" />
 					</Grid>
 					<Grid className={classes.warning} color="secondary" item xd={12}>
 						<span>{error}</span>
@@ -107,7 +118,7 @@ export default function SignupForm() {
 							Cancel
 						</Button>
 						<Button className={classes.button} type="submit">
-							Login
+							Sign up
 						</Button>
 					</Grid>
 				</form>

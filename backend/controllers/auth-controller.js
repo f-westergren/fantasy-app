@@ -7,10 +7,10 @@ exports.authenticate = async (req, res) => {
 		.where({ username })
 		.first()
 		.then((user) => {
-			if (!user) return res.status(401).json({ error: 'Invalid credentials' });
+			if (!user) return res.status(401).json({ message: 'Invalid credentials' });
 			else if (!comparePass(password, user.password)) {
 				return res.status(401).json({
-					error: 'Invalid credentials'
+					message: 'Invalid credentials'
 				});
 			} else {
 				res.send({ token: createToken(username) });

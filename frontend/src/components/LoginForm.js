@@ -61,6 +61,12 @@ export default function LoginForm() {
 			history.push('/picks');
 		} catch (err) {
 			console.log('error', err);
+			if (err.response.data.message) {
+				setError(err.response.data.message)
+			} else {
+				setError('Something went wrong :(')
+			}
+			
 		}
 	};
 

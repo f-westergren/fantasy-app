@@ -4,7 +4,6 @@ const e = require('express');
 
 // Retrieve all users
 exports.picksAll = async (req, res) => {
-	// Get all books from database
 	knex
 		.select('username', 'roster')
 		.from('picks')
@@ -16,8 +15,8 @@ exports.picksAll = async (req, res) => {
 				// Get points from ESPN.
 				const points = {};
 				const result = await fetchRosters(req.query.week, req.query.leagueId);
-				result.forEach((x) => getPointsAndLineup(x.homeRoster, points, false, result.earlySundayTeams));
-				result.forEach((x) => getPointsAndLineup(x.awayRoster, points, false, result.earlySundayTeams));
+				result.forEach((x) => getPointsAndLineup(x.homeRoster, points, false, result.sundayTeams));
+				result.forEach((x) => getPointsAndLineup(x.awayRoster, points, false, result.sundayTeams));
 
 				// Add points to rosters.
 
@@ -25,16 +24,14 @@ exports.picksAll = async (req, res) => {
 					let score = 0;
 					let resultRoster = JSON.parse(row.roster);
 					Object.keys(resultRoster).map((r) => {
-						resultRoster[r]['points'] = points[resultRoster[r].name] || 0;
-
-						// Add or deduct from total score. 'b' as in best.
-						if (r[0] === 'b') {
-							score += resultRoster[r].points;
-						} else {
-							score -= resultRoster[r].points;
+						let best = resultRoster[r][0]
+						let worst = resultRoster[r][1]
+						if (points[best] !== undefined && points[worst] !== undefined) {
+							score += points[best]
+							score -= points[worst]
 						}
 					});
-					row.roster = resultRoster;
+					row.roster = resultRoster
 					row.score = score;
 					results.push(row);
 				}
@@ -105,7 +102,7 @@ exports.picksReset = async (req, res) => {
 	// Remove all books from database
 	knex
 		.select('*') // select all records
-		.from('picks') // from 'books' table
+		.from('picks') // from 'picks' table
 		.truncate() // remove the selection
 		.then(() => {
 			// Send a success message in response

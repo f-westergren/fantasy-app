@@ -1,7 +1,6 @@
 // Import dependencies
 require('dotenv').config();
 const express = require('express');
-const bodyParser = require('body-parser');
 const path = require('path');
 
 const cors = require('cors');
@@ -30,9 +29,9 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(cors());
 app.use(morgan('tiny'));
 app.use(helmet());
-// app.use(cookieParser);
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(bodyParser.json());
+
+app.use(express.urlencoded({ extended: false }));
+app.use(express.json());
 
 app.use('/picks', picksRouter);
 app.use('/rosters', rostersRouter);

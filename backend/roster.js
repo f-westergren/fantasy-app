@@ -30,7 +30,7 @@ const getPointsAndLineup = (roster, scores, lineup, teams) => {
 	return { scores, lineup };
 };
 
-const fetchRosters = async (week = 9, leagueId = 67154469) => {
+const fetchRosters = async (week = 12, leagueId = 67154469) => {
 	const myClient = new Client({ leagueId: leagueId });
 	myClient.setCookies({ espnS2: process.env.ESPNS2, SWID: process.env.SWID });
 	try {
@@ -39,15 +39,12 @@ const fetchRosters = async (week = 9, leagueId = 67154469) => {
 			scoringPeriodId: +week,
 			matchupPeriodId: +week
 		});
-		const sundayTeams = await myClient.getNFLGamesForPeriod({ startDate: '20201108', endDate: '20201108' });
-		const earlySundayTeams = [];
-		sundayTeams.map((team) => {
-			if (team.startTime.getTime() === dates[week].getTime()) {
-				earlySundayTeams.push(team.homeTeam.team, team.awayTeam.team);
-			}
+		const teams = await myClient.getNFLGamesForPeriod({ startDate: '20201129', endDate: '20201129' });
+		const sundayTeams = [];
+		teams.map((team) => {
+				sundayTeams.push(team.homeTeam.team, team.awayTeam.team);
 		});
-
-		res['earlySundayTeams'] = earlySundayTeams;
+		res['sundayTeams'] = sundayTeams;
 		return res;
 	} catch (err) {
 		console.error(err);

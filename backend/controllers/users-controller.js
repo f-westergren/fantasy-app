@@ -1,9 +1,9 @@
 const knex = require('./../db');
 const bcrypt = require('bcryptjs');
+const { createToken } = require('../auth/_helpers');
 
 // Retrieve all users
 const usersAll = async (req, res) => {
-	// Get all books from database
 	knex
 		.select('*')
 		.from('users')
@@ -32,22 +32,39 @@ const usersOne = async (req, res) => {
 
 // Create new user
 const usersCreate = async (req, res) => {
-	const salt = bcrypt.genSaltSync();
-	const hash = bcrypt.hashSync(req.body.password, salt);
-	knex('users')
-		.insert({
-			username: req.body.username,
-			password: hash
+	const { username, password, repeat_password } = req.body
+	if (password !== repeat_password) res.status(400).json({ message: 'Passwords must match!'})
+
+	// First check if user exists already.
+	knex
+		.select('username')
+		.from('users')
+		.where({
+			username: req.body.username
 		})
-		.then(() => {
-			res.json({ message: `User \'${req.body.username}\' created.` });
+		.then(user => {
+			if (user.length > 0) return res.status(400).json({ message: 'Username already exists.'})
+			
+			// If user doesn't exist, insert new user.
+			else {
+				const salt = bcrypt.genSaltSync();
+				const hash = bcrypt.hashSync(password, salt);
+				knex('users')
+					.insert({
+						username: username,
+						password: hash
+					})
+					.then(() => {
+						res.json({ token: createToken(username), message: `User \'${username}\' created.` });
+					})
+					.catch((err) => {
+						res.json({ message: `There was an error creating ${req.body.username} user: ${err}` });
+					});
+			}
 		})
-		.catch((err) => {
-			res.json({ message: `There was an error creating ${req.body.title} user: ${err}` });
-		});
 };
 
-// Remove specific book
+// Remove specific user
 const usersDelete = async (req, res) => {
 	knex('users')
 		.where('id', req.params.id) // find correct record based on id
@@ -61,20 +78,3 @@ const usersDelete = async (req, res) => {
 };
 
 module.exports = { usersDelete, usersCreate, usersOne, usersAll };
-
-// // Remove all books on the list
-// exports.booksReset = async (req, res) => {
-//   // Remove all books from database
-//   knex
-//     .select('*') // select all records
-//     .from('books') // from 'books' table
-//     .truncate() // remove the selection
-//     .then(() => {
-//       // Send a success message in response
-//       res.json({ message: 'Book list cleared.' })
-//     })
-//     .catch(err => {
-//       // Send a error message in response
-//       res.json({ message: `There was an error resetting book list: ${err}.` })
-//     })
-// }

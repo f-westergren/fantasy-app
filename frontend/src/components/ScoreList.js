@@ -21,6 +21,7 @@ const useStyles = makeStyles((theme) => ({
 const ScoreList = () => {
 	const classes = useStyles();
 	const [ rosters, setRosters ] = useState([]);
+	const [ points, setPoints ] = useState([]);
 	const [ isLoading, setIsLoading ] = useState(true);
 	const [ error, setError ] = useState(false);
 
@@ -37,6 +38,18 @@ const ScoreList = () => {
 		getRosters();
 	}, []);
 
+	useEffect(() => {
+		const getPoints = async () => {
+			try {
+				const res = await axios.get(`${API_URL}/rosters?scores=true`);
+				setPoints(res.data.scores);
+			} catch (err) {
+				setError(err);
+			}
+		};
+		getPoints();
+	}, []);
+
 	if (isLoading) return <Loading />;
 	if (error) return <div>Can't get scores right now.</div>;
 
@@ -47,6 +60,7 @@ const ScoreList = () => {
 					<ScoreCard
 						className={classes.card}
 						roster={r.roster}
+						points={points}
 						score={Math.round((r.score + Number.EPSILON) * 100) / 100}
 						username={r.username}
 						key={r.username}

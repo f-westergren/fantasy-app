@@ -9,8 +9,8 @@ router.get('/', async (req, res) => {
 	let scores = req.query.scores ? {} : false;
 	try {
 		const result = await fetchRosters(req.query.week, req.query.leagueId);
-		result.forEach((x) => getPointsAndLineup(x.homeRoster, scores, lineup, result.earlySundayTeams));
-		result.forEach((x) => getPointsAndLineup(x.awayRoster, scores, lineup, result.earlySundayTeams));
+		result.forEach((x) => getPointsAndLineup(x.homeRoster, scores, lineup, result.sundayTeams));
+		result.forEach((x) => getPointsAndLineup(x.awayRoster, scores, lineup, result.sundayTeams));
 		res.send({ scores, lineup });
 	} catch (err) {
 		console.log(err);
