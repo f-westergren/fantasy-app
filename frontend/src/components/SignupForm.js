@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useHistory, Redirect } from 'react-router-dom';
+import { useNavigate, Navigate } from 'react-router-dom';
 import Button from '@material-ui/core/button';
 import Paper from '@material-ui/core/paper';
 import TextField from '@material-ui/core/TextField';
@@ -38,14 +38,14 @@ const useStyles = makeStyles((theme) => ({
 
 export default function SignupForm() {
 	const classes = useStyles();
-	const history = useHistory();
+	const navigate = useNavigate();
 	const { authToken, setAuthToken } = useAuth();
 	const [ formData, setFormData ] = useState('');
 	const [ error, setError ] = useState(false);
 
 	const user = getFromToken(authToken, 'username');
 
-	if (user) return <Redirect to="/" />;
+	if (user) return <Navigate to="/" />;
 
 	const handleChange = (e) => {
 		const { name, value } = e.target;
@@ -60,12 +60,13 @@ export default function SignupForm() {
 		try {
 			const res = await axios.post(`${API_URL}/users`, formData)
 			setAuthToken(res.data.token);
-			history.push('/picks');
+			navigate.push('/picks');
 		} catch (err) {
 			console.log(err)
-			if (err.response.data.message) {
+			if (err.response && err.response.data.message) {
 				setError(err.response.data.message)
 			} else {
+				console.log(err.response)
 				setError('Something went wrong :(')
 			}
 		}
@@ -114,10 +115,10 @@ export default function SignupForm() {
 						<span>{error}</span>
 					</Grid>
 					<Grid item xs={12}>
-						<Button className={classes.button} href="/">
+						<Button color="secondary" href="/">
 							Cancel
 						</Button>
-						<Button className={classes.button} type="submit">
+						<Button color="primary" type="submit">
 							Sign up
 						</Button>
 					</Grid>

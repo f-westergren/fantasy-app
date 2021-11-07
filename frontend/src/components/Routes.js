@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import Container from '@material-ui/core/container';
 import LoginForm from './LoginForm';
 import NotFound from './NotFound';
@@ -10,7 +10,7 @@ import PrivateRoute from './PrivateRoute';
 import { AuthContext } from './context/auth';
 import SignupForm from './SignupForm';
 
-const Routes = () => {
+const Paths = () => {
 	const existingToken = localStorage.getItem('token');
 	const [ authToken, setAuthToken ] = useState(existingToken);
 
@@ -28,18 +28,18 @@ const Routes = () => {
 			<BrowserRouter>
 				<NavBar />
 				<Container maxWidth="md">
-					<Switch>
+					<Routes>
 						<Route exact path="/" component={LoginForm} />
 						<Route exact path="/login" component={LoginForm} />
 						<Route exact path="/signup" component={SignupForm} />
 						<PrivateRoute exact path="/picks" component={PicksForm} />
 						<PrivateRoute exact path="/score" component={ScoreList} />
 						<Route component={NotFound} />
-					</Switch>
+					</Routes>
 				</Container>
 			</BrowserRouter>
 		</AuthContext.Provider>
 	);
 };
 
-export default Routes;
+export default Paths;

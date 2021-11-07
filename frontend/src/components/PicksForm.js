@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
 import Paper from '@material-ui/core/Paper';
@@ -43,7 +43,7 @@ const initialState = {
 }
 
 const PicksForm = () => {
-	const history = useHistory();
+	const navigate = useNavigate();
 	const classes = useStyles();
 	const [ formData, setFormData ] = useState(initialState);
 	const [ isUpdating, setIsUpdating ] = useState(false);
@@ -120,7 +120,7 @@ const PicksForm = () => {
 					week: 10
 				});
 			}
-			history.push('/score');
+			navigate.push('/score');
 		} catch (err) {
 			console.log('err', err);
 			// setError({ type: 'picks', message: err.response.data.message });
@@ -162,7 +162,7 @@ const PicksForm = () => {
 							<Button variant="contained" color="secondary" href="/">
 								Cancel
 							</Button>
-							<Button className={classes.button} variant="contained" color="primary" type="submit">
+							<Button disabled className={classes.button} variant="contained" color="primary" type="submit">
 								{isUpdating ? 'Update' : 'Submit'}
 							</Button>
 						</Grid>

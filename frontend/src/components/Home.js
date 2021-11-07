@@ -1,5 +1,5 @@
 import React from 'react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import Button from '@material-ui/core/button';
 import Grid from '@material-ui/core/grid';
 import { makeStyles } from '@material-ui/core/styles';
@@ -32,7 +32,7 @@ const useStyles = makeStyles((theme) => ({
 
 const Home = () => {
 	const classes = useStyles();
-	const history = useHistory();
+	const navigate = useNavigate();
 	const { authToken } = useAuth();
 
 	return <div />;

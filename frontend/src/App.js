@@ -1,5 +1,5 @@
 import React from 'react';
-import Routes from './components/Routes';
+import Paths from './components/Routes';
 import Image from './static/bg1.jpg';
 import { withStyles } from '@material-ui/core/styles';
 import './App.css';
@@ -24,7 +24,8 @@ const styles = (theme) => ({
 });
 
 function App() {
-	return <Routes />;
+	
+	return <Paths />;
 }
 
 export default withStyles(styles)(App);

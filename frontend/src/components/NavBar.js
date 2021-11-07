@@ -1,5 +1,5 @@
 import React from 'react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -26,7 +26,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function MenuAppBar() {
 	const { authToken, setAuthToken } = useAuth();
-	const history = useHistory();
+	const navigate = useNavigate();
 	const classes = useStyles();
 	const [ anchorEl, setAnchorEl ] = React.useState(null);
 	const open = Boolean(anchorEl);
@@ -43,7 +43,7 @@ export default function MenuAppBar() {
 
 	const logout = () => {
 		setAuthToken();
-		history.push('/');
+		navigate.push('/');
 	};
 
 	return (
@@ -78,7 +78,6 @@ export default function MenuAppBar() {
 								onClose={handleClose}
 							>
 								<MenuItem onClick={handleClose}>Current Week</MenuItem>
-								<MenuItem onClick={handleClose}>Week 7</MenuItem>
 							</Menu>
 						</div>
 					
@@ -94,7 +93,12 @@ export default function MenuAppBar() {
 					</Button>
 					</>
 					)}
-					{!user && <Button color="inherit" href="/login">Login</Button>}
+					{!user && 
+						<div>
+							<Button color="inherit" href="/login">Login</Button>
+							<Button color="inherit" href="/signup">Sign up</Button>
+						</div>
+					}
 				</Toolbar>
 			</AppBar>
 		</div>
