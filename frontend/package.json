@@ -3,17 +3,20 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@material-ui/core": "^4.11.0",
-    "@material-ui/icons": "^4.9.1",
+    "@emotion/react": "^11.5.0",
+    "@emotion/styled": "^11.3.0",
+    "@mui/icons-material": "^5.0.5",
+    "@mui/material": "^5.0.6",
+    "@mui/styles": "^5.0.2",
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.3.2",
     "@testing-library/user-event": "^7.1.2",
     "axios": "^0.20.0",
-    "react": "^16.14.0",
-    "react-dom": "^16.14.0",
-    "react-query": "^2.23.1",
-    "react-router-dom": "^5.2.0",
-    "react-scripts": "3.4.3"
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "react-query": "^3.31.0",
+    "react-router-dom": "^6.0.0",
+    "react-scripts": "4.0.3"
   },
   "scripts": {
     "start": "react-scripts start",
