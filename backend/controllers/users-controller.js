@@ -36,7 +36,8 @@ const usersCreate = async (req, res) => {
 	if (password !== repeat_password) res.status(400).json({ message: 'Passwords must match!'})
 
 	// First check if user exists already.
-	knex
+	else {
+		knex
 		.select('username')
 		.from('users')
 		.where({
@@ -62,6 +63,7 @@ const usersCreate = async (req, res) => {
 					});
 			}
 		})
+	}
 };
 
 // Remove specific user

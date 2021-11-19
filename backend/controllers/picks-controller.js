@@ -1,6 +1,5 @@
 const knex = require('./../db');
 const { fetchRosters, getPointsAndLineup } = require('../roster');
-const e = require('express');
 
 // Retrieve all users
 exports.picksAll = async (req, res) => {
@@ -20,7 +19,7 @@ exports.picksAll = async (req, res) => {
 
 				// Add points to rosters.
 
-				for (row of rows) {
+				for (let row of rows) {
 					let score = 0;
 					let resultRoster = JSON.parse(row.roster);
 					Object.keys(resultRoster).map((r) => {
@@ -40,7 +39,7 @@ exports.picksAll = async (req, res) => {
 			}
 		})
 		.catch((err) => {
-			res.json({ message: `There was an error retrieving picks: ${err}` });
+			res.status(500).send({ message: `There was an error retrieving picks: ${err}` });
 		});
 };
 
