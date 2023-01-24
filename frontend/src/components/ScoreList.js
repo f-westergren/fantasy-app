@@ -1,29 +1,29 @@
-import React, { useState, useEffect } from 'react';
-import ScoreCard from './ScoreCard';
-import Loading from './Loading';
-import axios from 'axios';
-import Grid from '@material-ui/core/grid';
-import { makeStyles } from '@material-ui/core/styles';
+import React, { useState, useEffect } from "react";
+import ScoreCard from "./ScoreCard";
+import Loading from "./Loading";
+import axios from "axios";
+import Grid from "@material-ui/core/Grid";
+import { makeStyles } from "@material-ui/core/styles";
 const API_URL = process.env.REACT_APP_API_URL;
 
 const useStyles = makeStyles((theme) => ({
 	root: {
 		flexGrow: 1,
-		justifyContent: 'center'
+		justifyContent: "center",
 	},
 	card: {
 		padding: theme.spacing(2),
 		maxWidth: 275,
-		justifyContent: 'center'
-	}
+		justifyContent: "center",
+	},
 }));
 
 const ScoreList = () => {
 	const classes = useStyles();
-	const [ rosters, setRosters ] = useState([]);
-	const [ points, setPoints ] = useState([]);
-	const [ isLoading, setIsLoading ] = useState(true);
-	const [ error, setError ] = useState(false);
+	const [rosters, setRosters] = useState([]);
+	const [points, setPoints] = useState([]);
+	const [isLoading, setIsLoading] = useState(true);
+	const [error, setError] = useState(false);
 
 	useEffect(() => {
 		const getRosters = async () => {
@@ -61,7 +61,9 @@ const ScoreList = () => {
 						className={classes.card}
 						roster={r.roster}
 						points={points}
-						score={Math.round((r.score + Number.EPSILON) * 100) / 100}
+						score={
+							Math.round((r.score + Number.EPSILON) * 100) / 100
+						}
 						username={r.username}
 						key={r.username}
 					/>
